@@ -15,7 +15,9 @@ package com.myapp_1.myapplication
 //noinspection UsingMaterialAndMaterial3Libraries
 //noinspection UsingMaterialAndMaterial3Libraries
 //noinspection UsingMaterialAndMaterial3Libraries
+//import com.myapp_1.myapplication.data.Food
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -60,8 +62,9 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
-import com.myapp_1.myapplication.data.Food
+import com.myapp_1.myapplication.data.FoodItem
 import com.myapp_1.myapplication.data.readFromFile
+import com.myapp_1.myapplication.data.writeFoodListToFile
 import kotlinx.coroutines.launch
 import values.MyApplicationTheme
 import values.getGreenColor
@@ -80,7 +83,10 @@ class MainActivity : ComponentActivity() {
                     floatingActionButton = {
                         FloatingActionButton(
                             onClick = {
-                                //Toast.makeText(context,"this is a toast", Toast.LENGTH_SHORT).show()
+                                writeFoodListToFile(context, "food_data.txt", listOf())
+                                val intent = Intent(this, MainActivity::class.java)
+                                startActivity(intent)
+
                             },
                             backgroundColor = getGreenColor(),
                             contentColor = Color.White
@@ -177,12 +183,14 @@ fun FoodList(context: Context){
         readFromFile(context, "food_data.txt").toMutableStateList()
     }
     val checkStates=remember {
-        mutableStateMapOf<Food, Boolean>().apply {
+        mutableStateMapOf<FoodItem, Boolean>().apply {
             foodItems.forEach { food -> this[food] = false }
         }
     }
     LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(16.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
         items(foodItems) { food ->
             ListItem(
@@ -196,7 +204,7 @@ fun FoodList(context: Context){
     }
 }
 @Composable
-fun ListItem(item: Food, isChecked:Boolean, onCheckChange: (Boolean) ->Unit){
+fun ListItem(item: FoodItem, isChecked:Boolean, onCheckChange: (Boolean) ->Unit){
     Surface(
         color=Color.White,
         border=BorderStroke(3.dp,Color(116,201,49)),

@@ -1,4 +1,4 @@
-package com.myapp_1.myapplication
+package com.myapp_1.myapplication.com.myapp_1.myapplication
 //import com.myapp_1.myapplication2.ui.theme.getGreenColor
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -37,7 +37,7 @@ import values.MyApplicationTheme
 
 //import values.MyApplicationTheme
 
-class food : ComponentActivity() {
+class Food : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

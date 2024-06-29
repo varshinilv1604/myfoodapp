@@ -17,7 +17,7 @@
             android:resource="@xml/attrs" />
 
         <activity
-            android:name=".food"
+            android:name=".com.myapp_1.myapplication.Food"
             android:exported="false"/>
         <activity
             android:name=".MainActivity"

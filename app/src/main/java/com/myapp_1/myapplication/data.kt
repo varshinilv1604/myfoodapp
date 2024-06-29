@@ -2,12 +2,12 @@ package com.myapp_1.myapplication.data
 
 import android.content.Context
 import java.io.File
-data class Food(
+data class FoodItem(
     var name: String,
     var price:String
 )
 
-private fun writeFoodListToFile(context: Context, fileName: String, foodList: List<Food>) {
+ fun writeFoodListToFile(context: Context, fileName: String, foodList: List<FoodItem>) {
     val file = File(context.filesDir, fileName)
     file.printWriter().use { writer ->
         foodList.forEach { food ->
@@ -16,12 +16,12 @@ private fun writeFoodListToFile(context: Context, fileName: String, foodList: Li
     }
 }
 
-fun readFromFile(context: Context, fileName: String): List<Food> {
+fun readFromFile(context: Context, fileName: String): List<FoodItem> {
     val file = File(context.filesDir, fileName)
-    val foodList = mutableListOf<Food>()
+    val foodList = mutableListOf<FoodItem>()
     if(!file.exists()){
         println("File not found,creating with default data")
-        val defaultData= listOf(Food("Pizza","50.0"),Food("Burger","5.0"))
+        val defaultData= listOf(FoodItem("Pizza","50.0"),FoodItem("Burger","5.0"))
     }
     file.bufferedReader().useLines { lines ->
         lines.forEach { line ->
@@ -29,7 +29,7 @@ fun readFromFile(context: Context, fileName: String): List<Food> {
             if (parts.size >= 2) {
                 val name = parts[0]
                 val price = parts[1]
-                foodList.add(Food(name,price))
+                foodList.add(FoodItem(name,price))
             }
         }
     }
