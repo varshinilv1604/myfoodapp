@@ -172,8 +172,81 @@ fun TabsContent(pagerState: PagerState) {
     HorizontalPager(state = pagerState) { page ->
         when (page) {
             0 -> FoodList(context = context)
-            1 -> TabContentScreen(data = "Welcome to Fun Screen")
+            1 -> FunScreen()
         }
+    }
+}
+@Composable
+fun FunScreen() {
+    val context = LocalContext.current
+    val sliderValue = rememberSaveable { mutableStateOf(0f) }
+    val rotation = rememberSaveable { mutableStateOf(0f) }
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text(
+            "EACH PERSON SHOULD PICK A COLOUR",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        Slider(
+            value = sliderValue.value,
+            onValueChange = { sliderValue.value = it },
+            valueRange = 0f..100f,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+
+        Box(
+            modifier = Modifier
+                .size(200.dp)
+                .graphicsLayer(rotationZ = rotation.value)
+        ) {
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                val colors = listOf(
+                    Color.Red, Color.Black, Color.Yellow, Color.Green,
+                    Color.Blue, Color.LightGray, Color.Red,Color.Cyan
+                )
+                for (i in colors.indices) {
+                    drawArc(
+                        color = colors[i],
+                        startAngle = i * (360f / colors.size),
+                        sweepAngle = 360f / colors.size,
+                        useCenter = true
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = {
+            val randomRotation = (0..360).random().toFloat()
+            rotation.value = randomRotation
+            val color = getColorFromRotation(randomRotation)
+            Toast.makeText(context, "$color has to pay the bill", Toast.LENGTH_LONG).show()
+        }) {
+            Text("Spin")
+        }
+    }
+}
+
+fun getColorFromRotation(rotation: Float): String {
+    return when ((rotation % 360) / 51.4286f) { // 360 / 7 segments = ~51.4286
+        in 0.0..1.0 -> "Red"
+        in 1.0..2.0 -> "Orange"
+        in 2.0..3.0 -> "Yellow"
+        in 3.0..4.0 -> "Green"
+        in 4.0..5.0 -> "Blue"
+        in 5.0..6.0 -> "Indigo"
+        in 6.0..7.0 -> "Violet"
+        else -> "Red"
     }
 }
 //data class FoodItem(val food:food, var isChecked: Boolean=false)
